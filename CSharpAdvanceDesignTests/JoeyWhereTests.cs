@@ -68,6 +68,7 @@ namespace CSharpAdvanceDesignTests
             var result = new List<Product>();
             foreach (var product in products)
             {
+                //TODO 不一樣的地方抽成參數, duplicate 壞味道
                 if (product.Price >= 200 && product.Price <= 500 && product.Cost < 30)
                 {
                     result.Add(product);
