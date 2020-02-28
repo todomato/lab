@@ -5,6 +5,7 @@ using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -27,7 +28,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             // 讓func語意 同測試名稱
-            var actual = JoeySkipWhile(cards, card => card.Kind == CardKind.Normal);
+            var actual = cards.JoeySkip(card => card.Kind == CardKind.Normal);
 
             var expected = new List<Card>
             {
@@ -38,21 +39,6 @@ namespace CSharpAdvanceDesignTests
             };
 
             expected.ToExpectedObject().ShouldMatch(actual.ToList());
-        }
-
-        private IEnumerable<Card> JoeySkipWhile(IEnumerable<Card> cards, Func<Card, bool> predicate)
-        {
-            var enumerator = cards.GetEnumerator();
-            var pass = false;
-            while (enumerator.MoveNext())
-            {
-                var card = enumerator.Current;
-                if (!predicate(card) || pass)
-                {
-                    pass = true;
-                    yield return enumerator.Current;
-                }
-            }
         }
     }
 }

@@ -125,9 +125,9 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<Employee> JoeySkip(this IEnumerable<Employee> employees, int count)
+        public static IEnumerable<TSoruce> JoeySkip<TSoruce>(this IEnumerable<TSoruce> source, int count)
         {
-            var enumerator = employees.GetEnumerator();
+            var enumerator = source.GetEnumerator();
             var index = 0;
             while (enumerator.MoveNext())
             {
@@ -137,6 +137,21 @@ namespace Lab
                 }
 
                 index++;
+            }
+        }
+
+        public static IEnumerable<Tsource> JoeySkip<Tsource>(this IEnumerable<Tsource> cards, Func<Tsource, bool> predicate)
+        {
+            var enumerator = cards.GetEnumerator();
+            var pass = false;
+            while (enumerator.MoveNext())
+            {
+                var card = enumerator.Current;
+                if (!predicate(card) || pass)
+                {
+                    pass = true;
+                    yield return enumerator.Current;
+                }
             }
         }
     }
