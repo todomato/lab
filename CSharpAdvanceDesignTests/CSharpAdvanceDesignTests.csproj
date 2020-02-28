@@ -84,6 +84,7 @@
     <Compile Include="JoeyWhereTests.cs" />
     <Compile Include="JoeyWhereWithDefaultTests.cs" />
     <Compile Include="JoeyZipTests.cs" />
+    <Compile Include="lin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

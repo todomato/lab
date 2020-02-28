@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
 using System.Linq;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -17,7 +18,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls, item => item.Replace("http:", "https:"));
+            var actual = urls.JoeySelect(item => item.Replace("http:", "https:"));
             var expected = new List<string>
             {
                 "https://tw.yahoo.com",
@@ -34,7 +35,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls, url => $"{url}:9191");
+            var actual = urls.JoeySelect(url => $"{url}:9191");
             var expected = new List<string>
             {
                 "http://tw.yahoo.com:9191",
@@ -48,21 +49,6 @@ namespace CSharpAdvanceDesignTests
 
         //TODO 發現只有add參數不同, 提取參數
 
-        private IEnumerable<TResult> JoeySelect<TSource, TResult>(IEnumerable<TSource> urls, Func<TSource, TResult> selector)
-        {
-            var result = new List<TResult>();
-            foreach (var item in urls)
-            {
-                result.Add(selector(item)); 
-            }
-            return result;
-        }
-
-        private IEnumerable<string> JoeySelectForEmployee(List<Employee> employees, Func<Employee, string> selector)
-        {
-            return JoeySelect(employees, selector);
-        }
-
         [Test]
         public void select_full_name()
         {
@@ -74,7 +60,8 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "David", LastName = "Chen"}
             };
 
-            var names = JoeySelectForEmployee(employees, e => $"{e.FirstName} {e.LastName}");
+            Func<Employee, string> selector = e => $"{e.FirstName} {e.LastName}";
+            var names = employees.JoeySelect(selector);
             var expected = new[]
             {
                 "Joey Chen",
@@ -84,9 +71,6 @@ namespace CSharpAdvanceDesignTests
 
             expected.ToExpectedObject().ShouldMatch(names);
         }
-
-    
-
 
         private static IEnumerable<string> GetUrls()
         {

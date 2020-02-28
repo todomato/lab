@@ -3,6 +3,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ExpectedObjects;
 using Lab;
 
@@ -108,6 +109,30 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
+        [Test]
+        public void find_positive_number_the_first_one_and_skip_second_one_and_take_others()
+        {
+            var numbers = new List<int> { 1, 2, 3, 4, -5 };
+            var actual = JoeyWhereWithIndex(numbers);
+            var expected = new List<int> { 1, 3, 4 };
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        private List<int> JoeyWhereWithIndex(IEnumerable<int> numbers)
+        {
+            var result = new List<int>();
+            var i = 0;
+            foreach (var item in numbers)
+            {
+                if (item > 0 && i != 1)
+                {
+                    result.Add(item);
+                }
+                i++;
+            }
+            return result;
+        }
+
 
         //summary :
         //過濾商品不一樣,其他一樣,只有if條件不一樣,可以抽出參數
@@ -126,7 +151,7 @@ namespace CSharpAdvanceDesignTests
 
         // 4.rename : 故意在<T> 改成product 讓IDE以為是T 再用rename
 
-        // 5. LinqExtensions.JoeyWhere 1.將JoeyWhere抽成方法 2.抽到class 先+static 然後 快捷鍵 extact class
+        // 5. LinqExtensions.JoeyWhere 1.將JoeyWhere抽成方法 2.抽到class 先+static 然後 alt enter 快捷鍵 extact class
         // class 本身沒有domain意義, 又太長太蠢
         // 如果其他api也可以用, helper 偏domain, 只要是集合就可以, 改共用擴充方法, class 加static
 
