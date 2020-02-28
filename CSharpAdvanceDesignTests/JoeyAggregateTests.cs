@@ -10,6 +10,7 @@ namespace CSharpAdvanceDesignTests
         [Test]
         public void drawling_money_that_balance_have_to_be_positive()
         {
+            // test
             var balance = 100.91m;
 
             var drawlingList = new List<int>
