@@ -53,8 +53,8 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = JoeyWhereCostLessThan30
-                (products, product => product.Price >= 200 && product.Price <= 500 && product.Cost < 30);
+            Func<Product, bool> predicate = product => product.Price >= 200 && product.Price <= 500 && product.Cost < 30;
+            var actual = JoeyWhere(products, predicate);
 
             var expected = new List<Product>
             {
@@ -64,26 +64,13 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private List<Product> JoeyWhereCostLessThan30(List<Product> products, Func<Product, bool> predicate)
-        {
-            return JoeyWhere(products, predicate); 
-            var result = new List<Product>();
-            foreach (var product in products)
-            {
-                // 不一樣的地方抽成參數, duplicate 壞味道 : 為了消除重複才用Func
-                if (predicate(product))
-                {
-                    result.Add(product);
-                }
-            }
-
-            return result;
-        }
-
         private List<Product> JoeyWhere(List<Product> products, Func<Product, bool> predicate)
         {
             //summary : 過濾商品不一樣,其他一樣,只有if條件不一樣,可以抽出參數
             //手動搬code 會有很多問題,用Inline method可以一次整理
+
+            //使用 : extract prameter ctrl + r + p
+
 
             var result = new List<Product>();
             foreach (var product in products)
