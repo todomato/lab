@@ -91,20 +91,21 @@ namespace CSharpAdvanceDesignTests
         {
             var enumerator = source.GetEnumerator();
             var result = new List<int>();
-            var idx = 0;
+            var index = 0;
             var sum = 0;
+            var lastGroupIndex = groupCount - 1;
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
                 sum += getValue(item);
 
-                if (idx % groupCount == (groupCount-1))
+                if (index % groupCount == lastGroupIndex)
                 {
                     result.Add(sum);
                     sum = 0;
                 }
 
-                idx++;
+                index++;
             }
 
             if (sum != 0)
