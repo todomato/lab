@@ -28,7 +28,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             //sum of all Saving of each group which 3 Account per group
-            var actual = MyGroupSum(accounts);
+            var actual = MyGroupSum(accounts, 3, c => c.Saving);
 
             var expected = new[] { 60, 150, 240, 210 };
 
@@ -87,18 +87,20 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<int> MyGroupSum(IEnumerable<Account> accounts)
+        private static IEnumerable<int> MyGroupSum<TSource>(IEnumerable<TSource> source, int groupCount, Func<TSource, int> value)
         {
-            var enumerator = accounts.GetEnumerator();
+            var enumerator = source.GetEnumerator();
             var result = new List<int>();
             var idx = 0;
-            var groupCount = 3;
 
             while (enumerator.MoveNext())
             {
                 if (idx % groupCount == 0)
                 {
-                    var sum = accounts.JoeySkip(idx).JoeyTake(groupCount).JoeySum(c => c.Saving);
+                    var sum = source
+                        .JoeySkip(idx)
+                        .JoeyTake(groupCount)
+                        .JoeySum(value);
                     result.Add(sum);
                 }
 
