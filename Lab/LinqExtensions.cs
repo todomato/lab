@@ -105,5 +105,23 @@ namespace Lab
         // 延遲執行
         // where 最多就8次 可以把多個方法組在同一個iterator裡面 簡單卻很重要
 
+        public static IEnumerable<TSource> JoeyTake<TSource>(this IEnumerable<TSource> employees, int count)
+        {
+            var enumerator = employees.GetEnumerator();
+            var index = 0;
+            while (enumerator.MoveNext())
+            {
+                if (index < count)
+                {
+                    yield return enumerator.Current;
+                }
+                else
+                {
+                    yield break;    //沒有值了
+                }
+
+                index++;
+            }
+        }
     }
 }
