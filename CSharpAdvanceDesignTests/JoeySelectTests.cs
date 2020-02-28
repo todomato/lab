@@ -52,7 +52,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = urls.JoeySelectWithIndex((item, index) => $"{index+1}. {item}");
+            var actual = urls.JoeySelect((item, index) => $"{index+1}. {item}");
             var expected = new List<string>
             {
                 "1. http://tw.yahoo.com",
