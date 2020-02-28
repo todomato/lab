@@ -4,6 +4,7 @@ using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
 using ExpectedObjects;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -26,7 +27,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             //
-            var actual = JoeyWhere(products, product => product.Price >= 200 && product.Price <= 500);
+            var actual = products.JoeyWhere(product => product.Price >= 200 && product.Price <= 500);
 
             var expected = new List<Product>
             {
@@ -54,7 +55,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             Func<Product, bool> predicate = product => product.Price >= 200 && product.Price <= 500 && product.Cost < 30;
-            var actual = JoeyWhere(products, predicate);
+            var actual = products.JoeyWhere(predicate);
 
             var expected = new List<Product>
             {
@@ -76,7 +77,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             Func<Employee, bool> predicate = e => e.FirstName.Length < 5;
-            var actual = JoeyWhere<Employee>(employees, predicate);
+            var actual = employees.JoeyWhere(predicate);
 
             var expected = new List<Employee>
             {
@@ -84,38 +85,30 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "May", LastName = "Chen"},
             };
 
+            // match (不管type 只比裡面內容 ex. list 比 array) vs equal (型別必須一樣)
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
 
-        private List<TSource> JoeyWhere<TSource>(List<TSource> sources, Func<TSource, bool> predicate)
-        {
-            var result = new List<TSource>();
-            foreach (var item in sources)
-            {
-                // 不一樣的地方抽成參數, duplicate 壞味道 : 為了消除重複才用Func
-                if (predicate(item))
-                {
-                    result.Add(item);
-                }
-            }
-
-            return result;
-        }
-
-
-        //summary : 過濾商品不一樣,其他一樣,只有if條件不一樣,可以抽出參數
+        //summary :
+        //過濾商品不一樣,其他一樣,只有if條件不一樣,可以抽出參數
         //手動搬code 會有很多問題,用Inline method可以一次整理
 
-        //使用 : extract prameter ctrl + r + p
+        // Day1使用 :
+        // extract prameter ctrl + r + p
         // inline method (variable field parameter class)
+        // extract class
+        // move folder
+        // convert static method to extendtion method 
 
-        // 鮮血測試來模擬 其他人如何使用api reshaprer 好處可以顯示
+        // *寫測試來模擬 其他人如何使用api reshaprer 好處可以顯示
+        // bad: 方法太具體也不好 因為只支援那件事 部彈性
+        // 3. 如果class不一樣product employee 第二格型別不一樣 其他一樣 使用泛型
 
-        // bad 方法太具體也不好 因為只支援那件事 部彈性
+        // 4.rename : 故意在<T> 改成product 讓IDE以為是T 再用rename
 
-        // 3. 如果class不一樣product empliyee 第二格型別不一樣 其他一樣 使用泛型
-
-        // 故意在<T> 改成product 讓IDE以為是T 再用rename
+        // 5. LinqExtensions.JoeyWhere 1.將JoeyWhere抽成方法 2.抽到class 先+static 然後 快捷鍵 extact class
+        // class 本身沒有domain意義, 又太長太蠢
+        // 如果其他api也可以用, helper 偏domain, 只要是集合就可以, 改共用擴充方法, class 加static
     }
 }
