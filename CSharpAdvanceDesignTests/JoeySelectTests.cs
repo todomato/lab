@@ -47,6 +47,28 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldEqual(actual.ToList());
         }
 
+        [Test] public void append_seq_no_first()
+        {
+            var urls = GetUrls();
+
+            var actual = JoeySelectWithIndex(urls);
+            var expected = new List<string>
+            {
+                "1. http://tw.yahoo.com:9191",
+                "2. https://facebook.com:9191",
+                "3. https://twitter.com:9191",
+                "4. http://github.com:9191"
+            };
+
+            expected.ToExpectedObject().ShouldEqual(actual.ToList());
+        }
+
+        private List<string> JoeySelectWithIndex(IEnumerable<string> urls)
+        {
+            throw new NotImplementedException();
+        }
+
+
         //TODO 發現只有add參數不同, 提取參數
 
         [Test]
