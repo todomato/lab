@@ -28,6 +28,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             // 讓func語意 同測試名稱
+            // 多寫合法的名字 不然加 負負...就會很難理解
             var actual = cards.JoeySkip(card => card.Kind == CardKind.Normal);
 
             var expected = new List<Card>

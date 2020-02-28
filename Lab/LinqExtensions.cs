@@ -143,13 +143,14 @@ namespace Lab
         public static IEnumerable<Tsource> JoeySkip<Tsource>(this IEnumerable<Tsource> cards, Func<Tsource, bool> predicate)
         {
             var enumerator = cards.GetEnumerator();
-            var pass = false;
+            var isStartTaking = false;
             while (enumerator.MoveNext())
             {
                 var card = enumerator.Current;
-                if (!predicate(card) || pass)
+                //if (predicate(card) && !isStartTaking) continue;
+                if (!predicate(card) || isStartTaking)
                 {
-                    pass = true;
+                    isStartTaking = true;
                     yield return enumerator.Current;
                 }
             }
