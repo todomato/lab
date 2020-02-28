@@ -33,18 +33,24 @@ namespace Lab
 
         public static IEnumerable<TResult> JoeySelect<TSource, TResult>(this IEnumerable<TSource> urls, Func<TSource, TResult> selector)
         {
-            var result = new List<TResult>();
-            foreach (var source in urls)
+            var enumerator = urls.GetEnumerator();
+
+            while (enumerator.MoveNext() == true)
             {
-                result.Add(selector(source)); 
+                yield return selector(enumerator.Current); //yield 可以記住自己的位置
             }
-            return result;
+
+            //var result = new List<TResult>();
+            //foreach (var source in urls)
+            //{
+            //    result.Add(selector(source)); 
+            //}
+            //return result;
         }
 
-        // list 沒有藥用這麼大的資料結構
+        // list 沒有藥用這麼大的資料結構 改用ienumerable
         public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
-            var result = new List<TSource>();
             var enumerator = source.GetEnumerator();
             var index = 0;
             while (enumerator.MoveNext())
@@ -52,11 +58,10 @@ namespace Lab
                 // postfix template
                 if (predicate(enumerator.Current, index))
                 {
-                    result.Add(enumerator.Current);
+                    yield return enumerator.Current;
                 }
                 index++;
             }
-            return result;
 
 
             //var result = new List<TSource>();
@@ -73,17 +78,32 @@ namespace Lab
             //return result;
         }
 
-        public static List<TSource> JoeySelect<TSource>(this IEnumerable<TSource> urls, Func<TSource, int, TSource> selector)
+        public static IEnumerable<TSource> JoeySelect<TSource>(this IEnumerable<TSource> urls, Func<TSource, int, TSource> selector)
         {
-            var result = new List<TSource>();
+            var enumerator = urls.GetEnumerator();
             var index = 0;
-            foreach (var item in urls)
+            while (enumerator.MoveNext())
             {
-                result.Add(selector(item, index));
+                // postfix template
+                yield return selector(enumerator.Current, index);
                 index++;
             }
 
-            return result;
+            //var result = new List<TSource>();
+            //var index = 0;
+            //foreach (var item in urls)
+            //{
+            //    result.Add(selector(item, index));
+            //    index++;
+            //}
+
+            //return result;
         }
+
+        // 非延遲執行
+        // where select 跑8次+2次
+        // 延遲執行
+        // where 最多就8次 可以把多個方法組在同一個iterator裡面 簡單卻很重要
+
     }
 }
