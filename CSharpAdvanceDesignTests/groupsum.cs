@@ -87,27 +87,52 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private static IEnumerable<int> MyGroupSum<TSource>(IEnumerable<TSource> source, int groupCount, Func<TSource, int> value)
+        private static IEnumerable<int> MyGroupSum<TSource>(IEnumerable<TSource> source, int groupCount, Func<TSource, int> getValue)
         {
             var enumerator = source.GetEnumerator();
             var result = new List<int>();
             var idx = 0;
-
+            var sum = 0;
             while (enumerator.MoveNext())
             {
-                if (idx % groupCount == 0)
+                var item = enumerator.Current;
+                sum += getValue(item);
+
+                if (idx % groupCount == (groupCount-1))
                 {
-                    var sum = source
-                        .JoeySkip(idx)
-                        .JoeyTake(groupCount)
-                        .JoeySum(value);
                     result.Add(sum);
+                    sum = 0;
                 }
 
                 idx++;
             }
 
+            if (sum != 0)
+            {
+                result.Add(sum);
+            }
+
             return result;
+
+            //var enumerator = source.GetEnumerator();
+            //var result = new List<int>();
+            //var idx = 0;
+
+            //while (enumerator.MoveNext())
+            //{
+            //    if (idx % groupCount == 0)
+            //    {
+            //        var sum = source
+            //            .JoeySkip(idx)
+            //            .JoeyTake(groupCount)
+            //            .JoeySum(getValue);
+            //        result.Add(sum);
+            //    }
+
+            //    idx++;
+            //}
+
+            //return result;
         }
     }
 
