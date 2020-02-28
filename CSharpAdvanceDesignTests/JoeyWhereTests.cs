@@ -75,7 +75,8 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "May", LastName = "Chen"},
             };
 
-            var actual = JoeyWhereForEmployee(employees, e => e.FirstName.Length < 5);
+            Func<Employee, bool> predicate = e => e.FirstName.Length < 5;
+            var actual = JoeyWhere<Employee>(employees, predicate);
 
             var expected = new List<Employee>
             {
@@ -84,22 +85,6 @@ namespace CSharpAdvanceDesignTests
             };
 
             expected.ToExpectedObject().ShouldMatch(actual);
-        }
-
-        private List<Employee> JoeyWhereForEmployee(List<Employee> employees, Func<Employee, bool> predicate)
-        {
-            return JoeyWhere<Employee>(employees, predicate);
-            //var result = new List<Employee>();
-            //foreach (var item in employees)
-            //{
-            //    // 不一樣的地方抽成參數, duplicate 壞味道 : 為了消除重複才用Func
-            //    if (predicate(item))
-            //    {
-            //        result.Add(item);
-            //    }
-            //}
-
-            //return result;
         }
 
 
