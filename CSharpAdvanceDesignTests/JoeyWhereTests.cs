@@ -177,7 +177,9 @@ namespace CSharpAdvanceDesignTests
 
         // *寫測試來模擬 其他人如何使用api reshaprer 好處可以顯示
         // bad: 方法太具體也不好 因為只支援那件事 部彈性
-        // 3. 如果class不一樣product employee 第二格型別不一樣 其他一樣 使用泛型
+        // 3. 如果class不一樣product employee 第二格型別不一樣 其他一樣 使用泛型 
+
+        // 重複fn 轉接 然後inline掉
 
         // 4.rename : 故意在<T> 改成product 讓IDE以為是T 再用rename
 
@@ -191,6 +193,14 @@ namespace CSharpAdvanceDesignTests
         // 啥時會用 :
         // 1. source code 無法掌控 ex.datetime 而用擴充
         // 2. 有共用lib, 但只有自己的產品有使用情境,其他產品部會用到,儘管大家都有修改權
+
+        //select 會有兩個T 就是一種mapping 用select 向 sql
+
+        //延遲執行
+
+        //skip take 要注意抽成參數 的語意
+        //take yield break;
+        //skip continue
 
     }
 }

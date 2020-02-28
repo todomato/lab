@@ -7,6 +7,10 @@ using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
+    //[homework] group sum of saving
+    //幾筆一群, sum哪一欄
+    //第一步先從account 先加進去 , 不要先預先設計, 不如先寫好再重購 不要自己寫func
+
     [TestFixture]
     [Ignore("not yet")]
     public class JoeyGroupByTests

@@ -155,5 +155,18 @@ namespace Lab
                 }
             }
         }
+
+        public static int JoeySum<TSource>(this IEnumerable<TSource> source, Func<TSource, int> value)
+        {
+            var enumerator = source.GetEnumerator();
+            var sum = 0;
+            while (enumerator.MoveNext())
+            {
+                var account = enumerator.Current;
+                sum += value(account);
+            }
+
+            return sum;
+        }
     }
 }
