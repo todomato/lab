@@ -7,14 +7,22 @@ using System.Collections.Generic;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture()]
-    [Ignore("not yet")]
+    //[Ignore("not yet")]
     public class JoeyTakeTests
     {
         [Test]
         public void take_2_employees()
         {
-            var employees = GetEmployees();
+            var employees = (IEnumerable<Employee>) new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"},
+                new Employee {FirstName = "Mike", LastName = "Chang"},
+                new Employee {FirstName = "Joseph", LastName = "Yao"},
+            };
 
+            // 取前兩筆
             var actual = JoeyTake(employees);
 
             var expected = new List<Employee>
@@ -23,24 +31,28 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Tom", LastName = "Li"},
             };
 
-            expected.ToExpectedObject().ShouldEqual(actual);
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
 
         private IEnumerable<Employee> JoeyTake(IEnumerable<Employee> employees)
         {
-            throw new System.NotImplementedException();
-        }
 
-        private static IEnumerable<Employee> GetEmployees()
-        {
-            return new List<Employee>
+            var enumerator = employees.GetEnumerator();
+            var index = 0;
+            var count = 2
+            while (enumerator.MoveNext())
             {
-                new Employee {FirstName = "Joey", LastName = "Chen"},
-                new Employee {FirstName = "Tom", LastName = "Li"},
-                new Employee {FirstName = "David", LastName = "Chen"},
-                new Employee {FirstName = "Mike", LastName = "Chang"},
-                new Employee {FirstName = "Joseph", LastName = "Yao"},
-            };
+                if (index < count)
+                {
+                    yield return enumerator.Current;
+                }
+                else
+                {
+                    yield break;    //沒有值了
+                }
+
+                index++;
+            }
         }
     }
 }
