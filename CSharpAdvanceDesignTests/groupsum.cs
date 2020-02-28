@@ -79,16 +79,12 @@ namespace CSharpAdvanceDesignTests
             };
 
             //sum of all Saving of each group which 3 Account per group
-            var actual = SumTop3Saving(accounts);
+            var result = accounts.JoeyTake(3).JoeySum(c => c.Saving);
+            var actual = result;
 
             var expected = 60;
 
             expected.ToExpectedObject().ShouldMatch(actual);
-        }
-
-        private int SumTop3Saving(IEnumerable<Account> accounts)
-        {
-            throw new NotImplementedException();
         }
 
         private IEnumerable<int> MyGroupSum(IEnumerable<Account> accounts)
