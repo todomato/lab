@@ -48,15 +48,45 @@ namespace CSharpAdvanceDesignTests
 
         //TODO 發現只有add參數不同, 提取參數
 
-        private IEnumerable<string> JoeySelect(IEnumerable<string> urls, Func<string, string> selector)
+        private IEnumerable<TResult> JoeySelect<TSource, TResult>(IEnumerable<TSource> urls, Func<TSource, TResult> selector)
         {
-            var result = new List<string>();
+            var result = new List<TResult>();
             foreach (var item in urls)
             {
                 result.Add(selector(item)); 
             }
             return result;
         }
+
+        private IEnumerable<string> JoeySelectForEmployee(List<Employee> employees, Func<Employee, string> selector)
+        {
+            return JoeySelect(employees, selector);
+        }
+
+        [Test]
+        public void select_full_name()
+        {
+            //呼叫方法然後用inline 不用自己複製
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"}
+            };
+
+            var names = JoeySelectForEmployee(employees, e => $"{e.FirstName} {e.LastName}");
+            var expected = new[]
+            {
+                "Joey Chen",
+                "Tom Li",
+                "David Chen"
+            };
+
+            expected.ToExpectedObject().ShouldMatch(names);
+        }
+
+    
+
 
         private static IEnumerable<string> GetUrls()
         {
