@@ -8,6 +8,24 @@ using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
+    public class OiTest
+    {
+        public static List<T> JoeyWhere<T>(List<T> source, Func<T, bool> predicate)
+        {
+            var result = new List<T>();
+            foreach (var item in source)
+            {
+                // 不一樣的地方抽成參數, duplicate 壞味道 : 為了消除重複才用Func
+                if (predicate(item))
+                {
+                    result.Add(item);
+                }
+            }
+
+            return result;
+        }
+    }
+
     [TestFixture()]
     public class JoeyWhereTests
     {
@@ -78,6 +96,7 @@ namespace CSharpAdvanceDesignTests
 
             Func<Employee, bool> predicate = e => e.FirstName.Length < 5;
             var actual = employees.JoeyWhere(predicate);
+            //actual = OiTest.JoeyWhere(employees, predicate);
 
             var expected = new List<Employee>
             {
@@ -110,5 +129,13 @@ namespace CSharpAdvanceDesignTests
         // 5. LinqExtensions.JoeyWhere 1.將JoeyWhere抽成方法 2.抽到class 先+static 然後 快捷鍵 extact class
         // class 本身沒有domain意義, 又太長太蠢
         // 如果其他api也可以用, helper 偏domain, 只要是集合就可以, 改共用擴充方法, class 加static
+
+        // 6.擴充方法 位置請一致, 團隊亂用會失控
+        // 啥時會用 問題:本質是static 強耦合 寫測試會卡住 無法isolate掉, OO廢掉 不能用繼承了,不能用多形
+        // 擴充方法會往func走, 無法走OO
+        // 啥時會用 :
+        // 1. source code 無法掌控 ex.datetime 而用擴充
+        // 2. 有共用lib, 但只有自己的產品有使用情境,其他產品部會用到,儘管大家都有修改權
+
     }
 }

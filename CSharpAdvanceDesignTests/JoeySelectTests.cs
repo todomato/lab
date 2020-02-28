@@ -8,7 +8,7 @@ using System.Linq;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture()]
-    [Ignore("not yet")]
+    //[Ignore("not yet")]
     public class JoeySelectTests
     {
         [Test]
@@ -30,7 +30,13 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<string> JoeySelect(IEnumerable<string> urls)
         {
-            throw new System.NotImplementedException();
+            var result = new List<string>();
+
+            foreach (var item in urls)
+            {
+                result.Add(item.Replace("http:", "https:")); 
+            }
+            return result;
         }
 
         private static IEnumerable<string> GetUrls()
