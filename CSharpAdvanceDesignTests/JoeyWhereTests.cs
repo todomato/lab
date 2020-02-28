@@ -64,25 +64,73 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private List<Product> JoeyWhere(List<Product> products, Func<Product, bool> predicate)
+        [Test]
+        public void Find_the_first_name_length_less_than_5()
         {
-            //summary : 過濾商品不一樣,其他一樣,只有if條件不一樣,可以抽出參數
-            //手動搬code 會有很多問題,用Inline method可以一次整理
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "David", LastName = "Chen"},
+                new Employee {FirstName = "Claire", LastName = "Chen"},
+                new Employee {FirstName = "May", LastName = "Chen"},
+            };
 
-            //使用 : extract prameter ctrl + r + p
+            var actual = JoeyWhereForEmployee(employees, e => e.FirstName.Length < 5);
+
+            var expected = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "May", LastName = "Chen"},
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        private List<Employee> JoeyWhereForEmployee(List<Employee> employees, Func<Employee, bool> predicate)
+        {
+            return JoeyWhere<Employee>(employees, predicate);
+            //var result = new List<Employee>();
+            //foreach (var item in employees)
+            //{
+            //    // 不一樣的地方抽成參數, duplicate 壞味道 : 為了消除重複才用Func
+            //    if (predicate(item))
+            //    {
+            //        result.Add(item);
+            //    }
+            //}
+
+            //return result;
+        }
 
 
-            var result = new List<Product>();
-            foreach (var product in products)
+        private List<TSource> JoeyWhere<TSource>(List<TSource> sources, Func<TSource, bool> predicate)
+        {
+            var result = new List<TSource>();
+            foreach (var item in sources)
             {
                 // 不一樣的地方抽成參數, duplicate 壞味道 : 為了消除重複才用Func
-                if (predicate(product))
+                if (predicate(item))
                 {
-                    result.Add(product);
+                    result.Add(item);
                 }
             }
 
             return result;
         }
+
+
+        //summary : 過濾商品不一樣,其他一樣,只有if條件不一樣,可以抽出參數
+        //手動搬code 會有很多問題,用Inline method可以一次整理
+
+        //使用 : extract prameter ctrl + r + p
+        // inline method (variable field parameter class)
+
+        // 鮮血測試來模擬 其他人如何使用api reshaprer 好處可以顯示
+
+        // bad 方法太具體也不好 因為只支援那件事 部彈性
+
+        // 3. 如果class不一樣product empliyee 第二格型別不一樣 其他一樣 使用泛型
+
+        // 故意在<T> 改成product 讓IDE以為是T 再用rename
     }
 }
