@@ -89,18 +89,23 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<int> MyGroupSum(IEnumerable<Account> accounts)
         {
-            //var enumerator = source.GetEnumerator();
-            //var result = new List<int>();
-            //var seprateCount = 3;
+            var enumerator = accounts.GetEnumerator();
+            var result = new List<int>();
+            var idx = 0;
+            var groupCount = 3;
 
-            //var temp = source.JoeyTake(seprateCount);
-            //var sum = 0;
-            //foreach (var VARIABLE in COLLECTION)
-            //{
-                
-            //}
+            while (enumerator.MoveNext())
+            {
+                if (idx % groupCount == 0)
+                {
+                    var sum = accounts.JoeySkip(idx).JoeyTake(groupCount).JoeySum(c => c.Saving);
+                    result.Add(sum);
+                }
 
-            throw new System.NotImplementedException();
+                idx++;
+            }
+
+            return result;
         }
     }
 
