@@ -168,5 +168,24 @@ namespace Lab
 
             return sum;
         }
+
+        public static bool JoeyAny(this IEnumerable<int> numbers, Func<int, bool> predicate)
+        {
+            var enumerator = numbers.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (predicate(current))
+                {
+                    return true;
+                }
+            }
+            return  false;
+        }
+
+        public static bool JoeyAny(this IEnumerable<Employee> employees)
+        {
+            return employees.GetEnumerator().MoveNext();
+        }
     }
 }
