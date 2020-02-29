@@ -194,6 +194,7 @@ namespace Lab
             while (enumerator.MoveNext())
             {
                 var current = enumerator.Current;
+                // 在流程下code 要語意化
                 if (!(predicate(current)))
                 {
                     return false;

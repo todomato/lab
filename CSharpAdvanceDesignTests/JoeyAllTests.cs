@@ -42,6 +42,7 @@ namespace CSharpAdvanceDesignTests
                 new Girl{Age = 30},
             };
 
+            //程式level也會先用 age < 18 return false; 但外面使用上應該用alt + enter 來轉換成外部使用的等義轉換
             var actual = girls.JoeyAll(x => x.Age > 18);
             Assert.IsTrue(actual);
         }
