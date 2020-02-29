@@ -3,6 +3,7 @@ using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -20,7 +21,7 @@ namespace CSharpAdvanceDesignTests
                 new Girl(){Age = 30},
             };
 
-            var girl = JoeyFirst(girls);
+            var girl = LinqExtensions.JoeyFirst(girls);
             var expected = new Girl { Age = 60 };
 
             expected.ToExpectedObject().ShouldEqual(girl);
@@ -34,20 +35,21 @@ namespace CSharpAdvanceDesignTests
             {
             };
 
-            TestDelegate action = () => JoeyFirst(girls);
+            TestDelegate action = () => LinqExtensions.JoeyFirst(girls);
             Assert.Throws<InvalidOperationException>(action);
         }
 
-        private TSource JoeyFirst<TSource>(IEnumerable<TSource> girls)
+        [Test]
+        public void get_first_chen()
         {
-            var enumerator = girls.GetEnumerator();
-            //遇到 var return 這種是沒有意義的,爾且會有生命週期
-            //可以改用function,就不會有生命週期
-
-            // while 可以先寫,但如果一進去就return 就可以依序把while 改成 if,因為只有一次 
-            return enumerator.MoveNext()
-                ? enumerator.Current
-                : throw new InvalidOperationException($"{nameof(girls)} is empty");
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "David", LastName = "Chen"}
+            };
+            var employee = employees.JoeyFirst(x => x.LastName == "Chen");
+            new Employee() { FirstName = "Joey", LastName = "Chen" }.ToExpectedObject().ShouldMatch(employee);
         }
     }
 }

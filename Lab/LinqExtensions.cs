@@ -9,10 +9,11 @@ namespace Lab
     {
         public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> sources, Func<TSource, bool> predicate)
         {
+            //TODO 可以轉打自己多參數的那隻,減少重複
             var enumerator = sources.GetEnumerator();
 
             // 延遲執行 會傳ienumerable + yield
-            while (enumerator.MoveNext() == true)
+            while (enumerator.MoveNext())
             {
                 if (predicate(enumerator.Current))
                 {
@@ -202,6 +203,32 @@ namespace Lab
             }
 
             return true;
+        }
+
+        public static TSource JoeyFirst<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (predicate(current))
+                {
+                    return current;
+                }
+            }
+            throw new InvalidOperationException($"{nameof(source)} is empty");
+        }
+
+        public static TSource JoeyFirst<TSource>(IEnumerable<TSource> source)
+        {
+            var enumerator = source.GetEnumerator();
+            //遇到 var return 這種是沒有意義的,爾且會有生命週期
+            //可以改用function,就不會有生命週期
+
+            // while 可以先寫,但如果一進去就return 就可以依序把while 改成 if,因為只有一次 
+            return enumerator.MoveNext()
+                ? enumerator.Current
+                : throw new InvalidOperationException($"{nameof(source)} is empty");
         }
     }
 }
