@@ -22,7 +22,8 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Cash", LastName = "Li"},
             };
 
-            var employee = JoeyLast(employees);
+            //var employee = JoeyLast(employees);
+            var employee = JoeyLast_v2(employees);
 
             new Employee { FirstName = "Cash", LastName = "Li" }
                 .ToExpectedObject().ShouldMatch(employee);
@@ -42,18 +43,30 @@ namespace CSharpAdvanceDesignTests
         private Employee JoeyLast(IEnumerable<Employee> employees)
         {
             var enumerator = employees.GetEnumerator();
-            Employee temp = null;
+            Employee employee = null;
             while (enumerator.MoveNext())
             {
-                temp = enumerator.Current;
+                employee = enumerator.Current;
             }
+            return employee ?? throw new InvalidOperationException($"{nameof(employees)} is empty");
+        }
 
-            if (temp != null)
+        private Employee JoeyLast_v2(IEnumerable<Employee> employees)
+        {
+            var enumerator = employees.GetEnumerator();
+
+            if (!enumerator.MoveNext())
             {
-                return temp;
+                throw new InvalidOperationException();
             }
 
-            throw new InvalidOperationException();
+            var last = enumerator.Current;
+            while (enumerator.MoveNext())
+            {
+                last = enumerator.Current;
+            }
+
+            return last;
         }
 
     }
