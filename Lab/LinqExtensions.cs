@@ -218,17 +218,5 @@ namespace Lab
             }
             throw new InvalidOperationException($"{nameof(source)} is empty");
         }
-
-        public static TSource JoeyFirst<TSource>(IEnumerable<TSource> source)
-        {
-            var enumerator = source.GetEnumerator();
-            //遇到 var return 這種是沒有意義的,爾且會有生命週期
-            //可以改用function,就不會有生命週期
-
-            // while 可以先寫,但如果一進去就return 就可以依序把while 改成 if,因為只有一次 
-            return enumerator.MoveNext()
-                ? enumerator.Current
-                : throw new InvalidOperationException($"{nameof(source)} is empty");
-        }
     }
 }
