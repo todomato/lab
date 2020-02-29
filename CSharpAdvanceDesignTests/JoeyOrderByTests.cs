@@ -81,7 +81,7 @@ namespace CSharpAdvanceDesignTests
         private IEnumerable<Employee> JoeyOrderByLastName(
             IEnumerable<Employee> employees, 
             IComparer<Employee> firstComparer, 
-            CombineComparer secondComparer)
+            IComparer<Employee> secondComparer)
         {
             var elements = employees.ToList();
             while (elements.Any())
@@ -100,7 +100,7 @@ namespace CSharpAdvanceDesignTests
                     }
                     else if (firstComparerResult == 0)
                     {
-                        if (SecondCompare(secondComparer, employee, minElement) < 0)
+                        if (secondComparer.Compare(employee, minElement) < 0)
                         {
                             minElement = employee;
                             index = i;
@@ -116,10 +116,6 @@ namespace CSharpAdvanceDesignTests
         }
 
         // make method non static 練習轉打
-        private static int SecondCompare(CombineComparer secondComparer, Employee employee, Employee minElement)
-        {
-            return secondComparer.KeyComparer.Compare(secondComparer.KeySelector(employee), secondComparer.KeySelector(minElement));
-        }
     }
 }
 
