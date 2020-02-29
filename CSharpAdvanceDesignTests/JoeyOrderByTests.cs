@@ -24,7 +24,7 @@ namespace CSharpAdvanceDesignTests
         }
     }
 
-    public class ComboComparer
+    public class ComboComparer :　IComparer<Employee>
     {
         public ComboComparer(IComparer<Employee> firstComparer, IComparer<Employee> secondComparer)
         {
@@ -34,6 +34,16 @@ namespace CSharpAdvanceDesignTests
 
         public IComparer<Employee> FirstComparer { get; private set; }
         public IComparer<Employee> SecondComparer { get; private set; }
+
+        public int Compare(Employee x, Employee y)
+        {
+            if (FirstComparer.Compare(x, y) != 0)
+            {
+                return FirstComparer.Compare(x, y);
+            }
+
+            return SecondComparer.Compare(x, y);
+        }
     }
 
     [TestFixture]
@@ -93,7 +103,7 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyOrderByLastName(
             IEnumerable<Employee> employees, 
-            ComboComparer comboComparer)
+            IComparer<Employee> comboComparer)
         {
             var elements = employees.ToList();
             while (elements.Any())
@@ -104,27 +114,7 @@ namespace CSharpAdvanceDesignTests
                 {
                     var employee = elements[i];
 
-                    var finalComboResult = 0;
-                    var firstComparerResult = comboComparer.FirstComparer.Compare(employee, minElement);
-
-                    if (firstComparerResult < 0)
-                    {
-                        finalComboResult = firstComparerResult;
-                        //minElement = employee;
-                        //index = i;
-                    }
-                    else if (firstComparerResult == 0)
-                    {
-                        var secondCompareResult = comboComparer.SecondComparer.Compare(employee, minElement);
-                        if (secondCompareResult < 0)
-                        {
-                            finalComboResult = secondCompareResult;
-                            //minElement = employee;
-                            //index = i;
-                        }
-                    }
-
-                    if (finalComboResult < 0)
+                    if (comboComparer.Compare(employee, minElement) < 0)
                     {
                         minElement = employee;
                         index = i;
@@ -134,11 +124,8 @@ namespace CSharpAdvanceDesignTests
                 elements.RemoveAt(index);
                 yield return minElement;
             }
-
-                   
         }
 
-        // make method non static 練習轉打
     }
 }
 
