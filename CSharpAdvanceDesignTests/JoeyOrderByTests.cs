@@ -17,6 +17,11 @@ namespace CSharpAdvanceDesignTests
 
         public Func<Employee, string> KeySelector { get; private set; }
         public IComparer<string> KeyComparer { get; private set; }
+
+        public int Compare(Employee employee, Employee minElement)
+        {
+            return KeyComparer.Compare(KeySelector(employee), KeySelector(minElement));
+        }
     }
 
     [TestFixture]
@@ -84,6 +89,10 @@ namespace CSharpAdvanceDesignTests
             //打通後,確保後續
             //如果一開始全部切selector 然後再接下去, 可能比較沒有大局關,沒有run過
 
+
+            //壞味道 data clump key selector 跟 compare 1 自己應該高內聚
+            // feature Envy orderby做了比較的事情
+
             var elements = employees.ToList();
             while (elements.Any())
             {
@@ -92,8 +101,7 @@ namespace CSharpAdvanceDesignTests
                 for (int i = 1; i < elements.Count; i++)
                 {
                     var employee = elements[i];
-                    var firstComparerResult = 
-                        firstComparer.KeyComparer.Compare(firstComparer.KeySelector(employee), firstComparer.KeySelector(minElement));
+                    var firstComparerResult = firstComparer.Compare(employee, minElement);
 
                     if (firstComparerResult < 0)
                     {
