@@ -36,14 +36,11 @@ namespace CSharpAdvanceDesignTests
 
         private bool JoeyAny(IEnumerable<Employee> employees)
         {
-            var enumerator = employees.GetEnumerator();
-            var flag = false;
-            while (enumerator.MoveNext())
+            foreach (var item in employees)
             {
-                flag = true;
+                return true;
             }
-
-            return flag;
+            return false;
         }
     }
 }
