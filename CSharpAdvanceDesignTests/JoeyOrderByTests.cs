@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
-    public class firstComparer
+    public class CombineComparer : IComparer<Employee>
     {
-        public firstComparer(Func<Employee, string> KeySelector, IComparer<string> KeyComparer)
+        public CombineComparer(Func<Employee, string> KeySelector, IComparer<string> KeyComparer)
         {
             this.KeySelector = KeySelector;
             this.KeyComparer = KeyComparer;
@@ -63,7 +63,9 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastName(employees, new firstComparer(x => x.LastName, Comparer<string>.Default), x => x.FirstName, Comparer<string>.Default);
+            Func<Employee, string> secondKeySelector = x => x.FirstName;
+            IComparer<string> secondKeyComparer = Comparer<string>.Default;
+            var actual = JoeyOrderByLastName(employees, new CombineComparer(x => x.LastName, Comparer<string>.Default), new CombineComparer(secondKeySelector, secondKeyComparer));
 
             var expected = new[]
             {
@@ -78,21 +80,9 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyOrderByLastName(
             IEnumerable<Employee> employees, 
-            firstComparer firstComparer, 
-            Func<Employee, string> secondKeySelector, 
-            IComparer<string> secondKeyComparer)
+            IComparer<Employee> firstComparer, 
+            CombineComparer secondComparer)
         {
-            //selection sort 每一輪取第一個跟所有element比較,取的最小的,然後移出去
-
-            //先將第一個搞定  -> selector -> compare...
-            //敏捷,完成第一個情境
-            //打通後,確保後續
-            //如果一開始全部切selector 然後再接下去, 可能比較沒有大局關,沒有run過
-
-
-            //壞味道 data clump key selector 跟 compare 1 自己應該高內聚
-            // feature Envy orderby做了比較的事情
-
             var elements = employees.ToList();
             while (elements.Any())
             {
@@ -110,7 +100,7 @@ namespace CSharpAdvanceDesignTests
                     }
                     else if (firstComparerResult == 0)
                     {
-                        if (secondKeyComparer.Compare(secondKeySelector(employee), secondKeySelector(minElement)) < 0)
+                        if (secondComparer.KeyComparer.Compare(secondComparer.KeySelector(employee), secondComparer.KeySelector(minElement)) < 0)
                         {
                             minElement = employee;
                             index = i;
@@ -121,6 +111,9 @@ namespace CSharpAdvanceDesignTests
                 elements.RemoveAt(index);
                 yield return minElement;
             }
+
+                   
         }
     }
 }
+
