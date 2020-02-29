@@ -46,7 +46,11 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastName(employees, x => x.LastName);
+            var actual = JoeyOrderByLastName(employees,
+                x => x.LastName, 
+                Comparer<string>.Default, 
+                x => x.FirstName, 
+                Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -59,10 +63,20 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastName(IEnumerable<Employee> employees, Func<Employee, string> firstSelector)
+        private IEnumerable<Employee> JoeyOrderByLastName(
+            IEnumerable<Employee> employees, 
+            Func<Employee, string> firstKeySelector, 
+            IComparer<string> firstKeyComparer, 
+            Func<Employee, string> secondKeySelector, 
+            IComparer<string> secondKeyComparer)
         {
             //selection sort 每一輪取第一個跟所有element比較,取的最小的,然後移出去
-            var stringComparer = Comparer<string>.Default;
+
+            //先將第一個搞定  -> selector -> compare...
+            //敏捷,完成第一個情境
+            //打通後,確保後續
+            //如果一開始全部切selector 然後再接下去, 可能比較沒有大局關,沒有run過
+
             var elements = employees.ToList();
             while (elements.Any())
             {
@@ -71,14 +85,17 @@ namespace CSharpAdvanceDesignTests
                 for (int i = 1; i < elements.Count; i++)
                 {
                     var employee = elements[i];
-                    if (stringComparer.Compare(firstSelector(employee), firstSelector(minElement)) < 0)
+                    var firstComparerResult = 
+                        firstKeyComparer.Compare(firstKeySelector(employee), firstKeySelector(minElement));
+
+                    if (firstComparerResult < 0)
                     {
                         minElement = employee;
                         index = i;
                     }
-                    else if (stringComparer.Compare(firstSelector(employee), firstSelector(minElement)) == 0)
+                    else if (firstComparerResult == 0)
                     {
-                        if (stringComparer.Compare(employee.FirstName, minElement.FirstName) < 0)
+                        if (secondKeyComparer.Compare(secondKeySelector(employee), secondKeySelector(minElement)) < 0)
                         {
                             minElement = employee;
                             index = i;
@@ -89,8 +106,6 @@ namespace CSharpAdvanceDesignTests
                 elements.RemoveAt(index);
                 yield return minElement;
             }
-
         }
-
     }
 }
