@@ -1,51 +1,12 @@
-﻿using System;
-using ExpectedObjects;
+﻿using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
-    public class CombineComparer : IComparer<Employee>
-    {
-        public CombineComparer(Func<Employee, string> KeySelector, IComparer<string> KeyComparer)
-        {
-            this.KeySelector = KeySelector;
-            this.KeyComparer = KeyComparer;
-        }
-
-        public Func<Employee, string> KeySelector { get; private set; }
-        public IComparer<string> KeyComparer { get; private set; }
-
-        public int Compare(Employee employee, Employee minElement)
-        {
-            return KeyComparer.Compare(KeySelector(employee), KeySelector(minElement));
-        }
-    }
-
-    public class ComboComparer :　IComparer<Employee>
-    {
-        public ComboComparer(IComparer<Employee> firstComparer, IComparer<Employee> secondComparer)
-        {
-            FirstComparer = firstComparer;
-            SecondComparer = secondComparer;
-        }
-
-        public IComparer<Employee> FirstComparer { get; private set; }
-        public IComparer<Employee> SecondComparer { get; private set; }
-
-        public int Compare(Employee x, Employee y)
-        {
-            if (FirstComparer.Compare(x, y) != 0)
-            {
-                return FirstComparer.Compare(x, y);
-            }
-
-            return SecondComparer.Compare(x, y);
-        }
-    }
-
     [TestFixture]
     //[Ignore("not yet")]
     public class JoeyOrderByTests
