@@ -119,6 +119,7 @@ namespace CSharpAdvanceDesignTests
             // 可以用flag處理, 用true false做判斷即可,讓人容易理解 
             // 而不適用 != 0 意義不同
             // 比較大小 使用>, < 不會用 == 1
+            //ex. count 判斷有沒有資料, 應該用Any()
             // TODO bug
             if (sum != 0)
             {
