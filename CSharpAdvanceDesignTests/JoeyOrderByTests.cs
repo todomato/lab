@@ -7,6 +7,18 @@ using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
+    public class firstComparer
+    {
+        public firstComparer(Func<Employee, string> KeySelector, IComparer<string> KeyComparer)
+        {
+            this.KeySelector = KeySelector;
+            this.KeyComparer = KeyComparer;
+        }
+
+        public Func<Employee, string> KeySelector { get; private set; }
+        public IComparer<string> KeyComparer { get; private set; }
+    }
+
     [TestFixture]
     //[Ignore("not yet")]
     public class JoeyOrderByTests
@@ -46,11 +58,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastName(employees,
-                x => x.LastName, 
-                Comparer<string>.Default, 
-                x => x.FirstName, 
-                Comparer<string>.Default);
+            var actual = JoeyOrderByLastName(employees, new firstComparer(x => x.LastName, Comparer<string>.Default), x => x.FirstName, Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -65,8 +73,7 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyOrderByLastName(
             IEnumerable<Employee> employees, 
-            Func<Employee, string> firstKeySelector, 
-            IComparer<string> firstKeyComparer, 
+            firstComparer firstComparer, 
             Func<Employee, string> secondKeySelector, 
             IComparer<string> secondKeyComparer)
         {
@@ -86,7 +93,7 @@ namespace CSharpAdvanceDesignTests
                 {
                     var employee = elements[i];
                     var firstComparerResult = 
-                        firstKeyComparer.Compare(firstKeySelector(employee), firstKeySelector(minElement));
+                        firstComparer.KeyComparer.Compare(firstComparer.KeySelector(employee), firstComparer.KeySelector(minElement));
 
                     if (firstComparerResult < 0)
                     {
