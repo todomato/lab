@@ -1,4 +1,5 @@
-﻿using ExpectedObjects;
+﻿using System;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastName(employees);
+            var actual = JoeyOrderByLastName(employees, x => x.LastName);
 
             var expected = new[]
             {
@@ -58,7 +59,7 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastName(IEnumerable<Employee> employees)
+        private IEnumerable<Employee> JoeyOrderByLastName(IEnumerable<Employee> employees, Func<Employee, string> firstSelector)
         {
             //selection sort 每一輪取第一個跟所有element比較,取的最小的,然後移出去
             var stringComparer = Comparer<string>.Default;
@@ -69,16 +70,17 @@ namespace CSharpAdvanceDesignTests
                 var index = 0;
                 for (int i = 1; i < elements.Count; i++)
                 {
-                    if (stringComparer.Compare(elements[i].LastName, minElement.LastName) < 0)
+                    var employee = elements[i];
+                    if (stringComparer.Compare(firstSelector(employee), firstSelector(minElement)) < 0)
                     {
-                        minElement = elements[i];
+                        minElement = employee;
                         index = i;
                     }
-                    else if (stringComparer.Compare(elements[i].LastName, minElement.LastName) == 0)
+                    else if (stringComparer.Compare(firstSelector(employee), firstSelector(minElement)) == 0)
                     {
-                        if (stringComparer.Compare(elements[i].FirstName, minElement.FirstName) < 0)
+                        if (stringComparer.Compare(employee.FirstName, minElement.FirstName) < 0)
                         {
-                            minElement = elements[i];
+                            minElement = employee;
                             index = i;
                         }
                     }
