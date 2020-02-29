@@ -62,6 +62,37 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
+        [Test]
+        public void orderBy_lastName_and_firstname_and_age()
+        {
+            var employees = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Wang", Age = 10},
+                new Employee {FirstName = "Tom", LastName = "Li", Age = 13},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 14},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 15},
+            };
+
+            var firstComboComparer = new ComboComparer(
+                new CombineComparer(x => x.LastName, Comparer<string>.Default),
+                new CombineComparer(x => x.FirstName, Comparer<string>.Default));
+
+            var secondComboComparer = new ComboComparer(firstComboComparer ,
+                new CombineComparer(x => x.Age.ToString(), Comparer<string>.Default));
+
+            var actual = JoeyOrderByLastName(employees, secondComboComparer);
+
+            var expected = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 14},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 15},
+                new Employee {FirstName = "Tom", LastName = "Li", Age = 13},
+                new Employee {FirstName = "Joey", LastName = "Wang", Age = 10},
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
         private IEnumerable<Employee> JoeyOrderByLastName(
             IEnumerable<Employee> employees, 
             IComparer<Employee> comboComparer)
