@@ -187,16 +187,20 @@ namespace Lab
         public static IMyOrderByEnumerable JoeyOrderBy<TKey>(this IEnumerable<Employee> employees,
             Func<Employee, TKey> keySelector)
         {
-            var combineComparer = new CombineComparer<TKey>(keySelector, Comparer<TKey>.Default);
-            return new MyOrderByEnumerable(employees, combineComparer);
+            return new MyOrderByEnumerable<TKey>(employees, keySelector);
+
+            //var combineComparer = new CombineComparer<TKey>(keySelector, Comparer<TKey>.Default);
+            //return new MyOrderByEnumerable(employees, combineComparer);
         }
 
         public static IMyOrderByEnumerable JoeyThenBy<TKey>(this IMyOrderByEnumerable myOrderByEnumerable,
             Func<Employee, TKey> keySelector)
         {
-            var combineComparer = new CombineComparer<TKey>(keySelector, Comparer<TKey>.Default);
-            return myOrderByEnumerable.Append(combineComparer);
-            
+            return myOrderByEnumerable.Append(keySelector);
+;
+            //var combineComparer = new CombineComparer<TKey>(keySelector, Comparer<TKey>.Default);
+            //return myOrderByEnumerable.Append(combineComparer);
+
         }
 
         public static bool JoeyAny(this IEnumerable<Employee> employees)

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Lab.Entities;
@@ -8,9 +9,10 @@ namespace Lab
     public interface IMyOrderByEnumerable : IEnumerable<Employee>
     {
         IMyOrderByEnumerable Append(IComparer<Employee> combineComparer);
+        IMyOrderByEnumerable Append<TKey>(Func<Employee, TKey> combineComparer);
     }
 
-    public class MyOrderByEnumerable : IMyOrderByEnumerable
+    public class MyOrderByEnumerable<TKey> : IMyOrderByEnumerable
     {
         private IComparer<Employee> _untialComparer;
         private IEnumerable<Employee> _source;
@@ -19,6 +21,12 @@ namespace Lab
         {
             _source = employees;
             _untialComparer = combineComparer;
+        }
+
+        public MyOrderByEnumerable(IEnumerable<Employee> employees, Func<Employee, TKey> keySelector)
+        {
+            _source = employees;
+            _untialComparer = new CombineComparer<TKey>(keySelector, Comparer<TKey>.Default);
         }
 
         public IEnumerator<Employee> GetEnumerator()
@@ -59,6 +67,13 @@ namespace Lab
         public IMyOrderByEnumerable Append(IComparer<Employee> combineComparer)
         {
             _untialComparer = new ComboComparer(_untialComparer, combineComparer);
+            return this;
+        }
+
+        public IMyOrderByEnumerable Append<TKey1>(Func<Employee, TKey1> keySelector)
+        {
+            var combineComparer = new CombineComparer<TKey1>(keySelector, Comparer<TKey1>.Default);
+            _untialComparer =  new ComboComparer(_untialComparer, combineComparer);
             return this;
         }
     }
