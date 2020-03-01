@@ -1,9 +1,11 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using ExpectedObjects;
 
 namespace CSharpAdvanceDesignTests
 {
+
     [TestFixture]
     //[Ignore("not yet")]
     public class JoeySequenceEqualTests
@@ -78,5 +80,7 @@ namespace CSharpAdvanceDesignTests
             }
            
         }
+
+      
     }
 }

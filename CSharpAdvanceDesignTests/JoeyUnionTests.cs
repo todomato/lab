@@ -14,7 +14,6 @@ namespace CSharpAdvanceDesignTests
         {
             var first = new[] { 1, 3, 5, 3};
             var second = new[] { 5, 3, 7 };
-
             var actual = JoeyUnion(first, second);
             var expected = new[] { 1, 3, 5, 7 };
 
