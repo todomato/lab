@@ -34,6 +34,10 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyReverse(IEnumerable<Employee> employees)
         {
+            // stack 資料結構 先進後出
+            return new Stack<Employee>(employees);
+
+            // andy
             var target = employees.ToList();
             var result = new List<Employee>();
             var count = employees.Count();
