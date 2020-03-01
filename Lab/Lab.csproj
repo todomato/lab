@@ -55,6 +55,7 @@
     <Compile Include="Entities\Role.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="LinqExtensions.cs" />
+    <Compile Include="MyOrderByEnumerable.cs" />
     <Compile Include="ProductValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
