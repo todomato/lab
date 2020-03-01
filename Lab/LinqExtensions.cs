@@ -185,6 +185,19 @@ namespace Lab
             return  false;
         }
 
+        public static IEnumerable<Employee> JoeyOrderBy<TKey>(this IEnumerable<Employee> employees,
+            Func<Employee, TKey> keySelector)
+        {
+            return employees;
+        }
+
+        public static IEnumerable<Employee> JoeyThenBy<TKey>(this IEnumerable<Employee> employees,
+            Func<Employee, TKey> keySelector)
+        {
+            return employees;
+        }
+
+
         public static bool JoeyAny(this IEnumerable<Employee> employees)
         {
             return employees.GetEnumerator().MoveNext();

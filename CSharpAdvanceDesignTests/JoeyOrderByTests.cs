@@ -72,15 +72,20 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen", Age = 14},
             };
 
-            var firstComboComparer = new ComboComparer(
-                new CombineComparer<string>(x => x.LastName, Comparer<string>.Default),
-                new CombineComparer<string>(x => x.FirstName, Comparer<string>.Default));
+            //var firstComboComparer = new ComboComparer(
+            //    new CombineComparer<string>(x => x.LastName, Comparer<string>.Default),
+            //    new CombineComparer<string>(x => x.FirstName, Comparer<string>.Default));
 
-            var secondComboComparer = new ComboComparer(
-                firstComboComparer ,
-                new CombineComparer<int>(x => x.Age, Comparer<int>.Default));
+            //var secondComboComparer = new ComboComparer(
+            //    firstComboComparer ,
+            //    new CombineComparer<int>(x => x.Age, Comparer<int>.Default));
 
-            var actual = employees.JoeySort(secondComboComparer);
+            //var actual = employees.JoeySort(secondComboComparer);
+
+            var actual = employees
+                .JoeyOrderBy(e => e.LastName)
+                .JoeyThenBy(e => e.FirstName)
+                .JoeyThenBy(e => e.Age);
 
             var expected = new[]
             {
