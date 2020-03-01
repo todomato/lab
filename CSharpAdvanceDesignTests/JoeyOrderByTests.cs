@@ -22,7 +22,7 @@ namespace CSharpAdvanceDesignTests
         //        new Employee {FirstName = "Joey", LastName = "Chen"},
         //    };
 
-        //    var actual = JoeyOrderByLastName(employees);
+        //    var actual = JoeySort(employees);
 
         //    var expected = new[]
         //    {
@@ -46,10 +46,9 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastName(employees, 
-                new ComboComparer(
-                    new CombineComparer<string>(x => x.LastName, Comparer<string>.Default), 
-                    new CombineComparer<string>(x => x.FirstName, Comparer<string>.Default)));
+            var actual = employees.JoeySort(new ComboComparer(
+                new CombineComparer<string>(x => x.LastName, Comparer<string>.Default), 
+                new CombineComparer<string>(x => x.FirstName, Comparer<string>.Default)));
 
             var expected = new[]
             {
@@ -81,7 +80,7 @@ namespace CSharpAdvanceDesignTests
                 firstComboComparer ,
                 new CombineComparer<int>(x => x.Age, Comparer<int>.Default));
 
-            var actual = JoeyOrderByLastName(employees, secondComboComparer);
+            var actual = employees.JoeySort(secondComboComparer);
 
             var expected = new[]
             {
@@ -97,31 +96,6 @@ namespace CSharpAdvanceDesignTests
         // issue 變彈型 但是外面呼叫端麻煩
         // 一般情境 幫忙呼叫端 建立builder 幫忙做comparer
         // 但出現了linq 
-        private IEnumerable<Employee> JoeyOrderByLastName(
-            IEnumerable<Employee> employees, 
-            IComparer<Employee> comboComparer)
-        {
-            var elements = employees.ToList();
-            while (elements.Any())
-            {
-                var minElement = elements[0];
-                var index = 0;
-                for (int i = 1; i < elements.Count; i++)
-                {
-                    var employee = elements[i];
-
-                    if (comboComparer.Compare(employee, minElement) < 0)
-                    {
-                        minElement = employee;
-                        index = i;
-                    }
-                }
-
-                elements.RemoveAt(index);
-                yield return minElement;
-            }
-        }
-
     }
 }
 
