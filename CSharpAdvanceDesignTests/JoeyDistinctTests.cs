@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture()]
-    [Ignore("not yet")]
+    //[Ignore("not yet")]
     public class JoeyDistinctTests
     {
         [Test]
@@ -22,7 +22,19 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<int> Distinct(IEnumerable<int> numbers)
         {
-            throw new System.NotImplementedException();
+            // 自己去重複 的資料結構特性
+            return new HashSet<int>(numbers);
+
+            //andy 
+            var result = new List<int>();
+            foreach (var item in numbers)
+            {
+                if (result.IndexOf(item) == -1)
+                {
+                    result.Add(item);
+                }
+            }
+            return result;
         }
     }
 }
