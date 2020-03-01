@@ -69,8 +69,8 @@ namespace CSharpAdvanceDesignTests
             {
                 new Employee {FirstName = "Joey", LastName = "Wang", Age = 10},
                 new Employee {FirstName = "Tom", LastName = "Li", Age = 13},
-                new Employee {FirstName = "Joey", LastName = "Chen", Age = 14},
                 new Employee {FirstName = "Joey", LastName = "Chen", Age = 15},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 14},
             };
 
             var firstComboComparer = new ComboComparer(
@@ -94,6 +94,9 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
+        // issue 變彈型 但是外面呼叫端麻煩
+        // 一般情境 幫忙呼叫端 建立builder 幫忙做comparer
+        // 但出現了linq 
         private IEnumerable<Employee> JoeyOrderByLastName(
             IEnumerable<Employee> employees, 
             IComparer<Employee> comboComparer)
