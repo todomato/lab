@@ -11,7 +11,7 @@
         {
             //序列畫 反序列畫 加減密 壓縮解壓縮 比較會消耗效能
 
-            //常用在寫 logger
+            //常用在寫 logger 沒用過表示怪怪的
             return $"{nameof(LastName)}: {LastName}, {nameof(FirstName)}: {FirstName}, {nameof(Role)}: {Role}, {nameof(Age)}: {Age}";
         }
     }
