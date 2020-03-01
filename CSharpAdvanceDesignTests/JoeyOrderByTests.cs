@@ -48,8 +48,8 @@ namespace CSharpAdvanceDesignTests
 
             var actual = JoeyOrderByLastName(employees, 
                 new ComboComparer(
-                    new CombineComparer(x => x.LastName, Comparer<string>.Default), 
-                    new CombineComparer(x => x.FirstName, Comparer<string>.Default)));
+                    new CombineComparer<string>(x => x.LastName, Comparer<string>.Default), 
+                    new CombineComparer<string>(x => x.FirstName, Comparer<string>.Default)));
 
             var expected = new[]
             {
@@ -74,11 +74,12 @@ namespace CSharpAdvanceDesignTests
             };
 
             var firstComboComparer = new ComboComparer(
-                new CombineComparer(x => x.LastName, Comparer<string>.Default),
-                new CombineComparer(x => x.FirstName, Comparer<string>.Default));
+                new CombineComparer<string>(x => x.LastName, Comparer<string>.Default),
+                new CombineComparer<string>(x => x.FirstName, Comparer<string>.Default));
 
-            var secondComboComparer = new ComboComparer(firstComboComparer ,
-                new CombineComparer(x => x.Age.ToString(), Comparer<string>.Default));
+            var secondComboComparer = new ComboComparer(
+                firstComboComparer ,
+                new CombineComparer<int>(x => x.Age, Comparer<int>.Default));
 
             var actual = JoeyOrderByLastName(employees, secondComboComparer);
 

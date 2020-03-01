@@ -33,7 +33,7 @@ namespace CSharpAdvanceDesignTests
             {
                 new Employee {FirstName = "Joey", LastName = "Chen"},
                 new Employee {FirstName = "Eric", LastName = "Chen"},
-                new Employee {FirstName = "John", LastName = "Chen"},
+                new Employee {FirstName = "John", LastName = "Chen"}
             };
 
             firstGroup.ToExpectedObject().ShouldMatch(actual.First().ToList());

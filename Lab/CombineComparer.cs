@@ -4,16 +4,16 @@ using Lab.Entities;
 
 namespace Lab
 {
-    public class CombineComparer : IComparer<Employee>
+    public class CombineComparer<TKey> : IComparer<Employee>
     {
-        public CombineComparer(Func<Employee, string> KeySelector, IComparer<string> KeyComparer)
+        public CombineComparer(Func<Employee, TKey> keySelector, IComparer<TKey> keyComparer)
         {
-            this.KeySelector = KeySelector;
-            this.KeyComparer = KeyComparer;
+            this.KeySelector = keySelector;
+            this.KeyComparer = keyComparer;
         }
 
-        public Func<Employee, string> KeySelector { get; private set; }
-        public IComparer<string> KeyComparer { get; private set; }
+        public Func<Employee, TKey> KeySelector { get; private set; }
+        public IComparer<TKey> KeyComparer { get; private set; }
 
         public int Compare(Employee employee, Employee minElement)
         {
