@@ -23,6 +23,8 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<int> JoeyUnion(IEnumerable<int> first, IEnumerable<int> second)
         {
+            //X anti-pattern  addrange + distinct
+
             var hashSet = new HashSet<int>();
             var firstEnumerator = first.GetEnumerator();
             while (firstEnumerator.MoveNext())

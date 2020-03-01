@@ -3,11 +3,11 @@ using Lab.Entities;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyJoinTests
     {
         [Test]
@@ -32,7 +32,12 @@ namespace CSharpAdvanceDesignTests
                 new Pet() {Name = "QQ", Owner = joey},
             };
 
-            var actual = JoeyJoin(employees, pets);
+            var actual = JoeyJoin(
+                employees, 
+                pets, 
+                employee => employee, 
+                pet => pet.Owner, 
+                pet1 => Tuple.Create(((Func<Pet, Employee>) (pet => pet.Owner))(pet1).FirstName, pet1.Name));
 
             var expected = new[]
             {
@@ -45,9 +50,42 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Tuple<string, string>> JoeyJoin(IEnumerable<Employee> employees, IEnumerable<Pet> pets)
+        private IEnumerable<Tuple<string, string>> JoeyJoin(
+            IEnumerable<Employee> employees, 
+            IEnumerable<Pet> pets, 
+            Func<Employee, Employee> outerSelector, 
+            Func<Pet, Employee> innerSelector, 
+            Func<Pet, Tuple<string, string>> resultSelector)
         {
-            throw new NotImplementedException();
+            var enumerator = employees.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+
+                var pertsEnumerator = pets.GetEnumerator();
+                while (pertsEnumerator.MoveNext())
+                {
+                    var pet = pertsEnumerator.Current;
+                    if (outerSelector(current) == innerSelector(pet))
+                    {
+                        yield return resultSelector(pet);
+                    }
+                }
+            }
+
+            // select manay
+            //var enumerator = employees.GetEnumerator();
+            //while (enumerator.MoveNext())
+            //{
+            //    var current = enumerator.Current;
+
+            //    var pertsEnumerator = pets.GetEnumerator();
+            //    while (pertsEnumerator.MoveNext())
+            //    {
+            //        var pet = pertsEnumerator.Current;
+            //       yield return Tuple.Create(pet.Owner.FirstName , pet.Name);
+            //    }
+            //}   
         }
     }
 }
